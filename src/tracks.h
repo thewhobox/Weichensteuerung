@@ -16,6 +16,7 @@ enum Type
         WeicheL180,
         WeicheL270,
         WeicheR,
+        WeicheR45,
         WeicheR90,
         WeicheR180,
         WeicheR270,
@@ -30,7 +31,14 @@ enum State
         Updated
 };
 
-struct Gleis
+enum Selection
+{
+    NotSelected,
+    Selected,
+    Selected2
+};
+
+struct Track
 {
         const int posX;
         const int posY;
@@ -38,12 +46,13 @@ struct Gleis
         const byte nummer;
         const Type type;
         const char track[3];
+        const char track2[3];
         State state;
         bool direction;
-        bool isSelected;
+        Selection isSelected;
 };
 
-struct Gleis gleise[] = {
+struct Track tracks[] = {
     //---------Spalte 0
     {
         .posX = 0,
@@ -342,18 +351,20 @@ struct Gleis gleise[] = {
         .posX = 4,
         .posY = 3,
         .type = Type::Kurve90,
+        .track = "I1",
         .state = State::Initial
     },
     {
         .posX = 4,
         .posY = 4,
         .type = Type::Gerade,
+        .track = "I1",
         .state = State::Initial
     },
     {
         .posX = 4,
         .posY = 5,
-        .type = Type::WeicheL90,
+        .type = Type::WeicheR45,
         .track = "IX",
         .state = State::Initial
     },
@@ -407,6 +418,7 @@ struct Gleis gleise[] = {
         .posX = 5,
         .posY = 3,
         .type = Type::Gerade90,
+        .track = "I1",
         .state = State::Initial
     },
     {
@@ -419,12 +431,15 @@ struct Gleis gleise[] = {
         .posX = 5,
         .posY = 5,
         .type = Type::Tunnel,
+        .track = "G2",
+        .track2 = "I2",
         .state = State::Initial
     },
     {
         .posX = 5,
         .posY = 6,
         .type = Type::Kurve,
+        .track = "G2",
         .state = State::Initial
     },
     {
@@ -475,6 +490,7 @@ struct Gleis gleise[] = {
         .posX = 6,
         .posY = 3,
         .type = Type::Gerade90,
+        .track = "Y1",
         .state = State::Initial
     },
     {
@@ -487,12 +503,14 @@ struct Gleis gleise[] = {
         .posX = 6,
         .posY = 5,
         .type = Type::Gerade90,
+        .track = "I2",
         .state = State::Initial
     },
     {
         .posX = 6,
         .posY = 6,
         .type = Type::Gerade90,
+        .track = "G2",
         .state = State::Initial
     },
     {
@@ -539,6 +557,7 @@ struct Gleis gleise[] = {
         .posX = 7,
         .posY = 3,
         .type = Type::Kurve180,
+        .track = "Y1",
         .state = State::Initial
     },
     {
@@ -551,6 +570,7 @@ struct Gleis gleise[] = {
         .posX = 7,
         .posY = 5,
         .type = Type::Kurve270,
+        .track = "I2",
         .state = State::Initial
     },
     {
@@ -564,7 +584,7 @@ struct Gleis gleise[] = {
         .posX = 7,
         .posY = 7,
         .type = Type::Gerade90,
-        .track = "D6",
+        .track = "D8",
         .state = State::Initial
     },
     {
@@ -622,13 +642,14 @@ struct Gleis gleise[] = {
         .posX = 8,
         .posY = 6,
         .type = Type::Gerade90,
+        .track = "G2",
         .state = State::Initial
     },
     {
         .posX = 8,
         .posY = 7,
         .type = Type::Kurve180,
-        .track = "D6",
+        .track = "D8",
         .state = State::Initial
     },
     {
