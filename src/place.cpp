@@ -102,14 +102,13 @@ int _place_get_route(PLACE *start, const char *destination, char *buffer, char *
         if(strstr(new_visited, needle) != NULL)
             continue;
 
-        if(w->to->name[1] > '2')
         {
             int counter = 0;
 
-            //von ASCII 3 bis 6
-            for(int i = 51; i < 55; i++)
+            //von ASCII 0 bis 8
+            for(char i = '0'; i < '9'; i++)
             {
-                char buffer[3] = { w->to->name[0], i, '\0' };
+                char buffer[] = { w->to->name[0], i, '\0' };
                 sprintf(needle, ",%s,", buffer);
                 if(strstr(new_visited, needle) != NULL)
                     counter++;
@@ -125,7 +124,7 @@ int _place_get_route(PLACE *start, const char *destination, char *buffer, char *
         }
         sprintf(buffer, "%s - %s", start->name, new_buffer);
         distance = w->distance + distance;
-        debug("%d : %s\n", distance, buffer);
+        //debug("%d : %s\n", distance, buffer);
 
         if(shortest > distance){
             strcpy(shortest_buffer, buffer);

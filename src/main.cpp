@@ -499,15 +499,19 @@ void doTracks()
     }
 }
 
-void normalLoop()
+void doMenu()
 {
-    doTracks();
-    
     int menuCount = (sizeof(MenuItems) / sizeof(MenuItems[0]));
     for(int i = 0; i < menuCount; i++)
     {
         handleMenu(&MenuItems[i], i);
     }
+}
+
+void normalLoop()
+{
+    doTracks();
+    doMenu();
 
     uint16_t touchX;
     uint16_t touchY;
@@ -523,6 +527,7 @@ void normalLoop()
             int index = (touchY - rest) / 32;
             Serial.print("Index: ");
             Serial.println(index);
+            int menuCount = (sizeof(MenuItems) / sizeof(MenuItems[0]));
             if(index > (menuCount -1)) return;
             MenuItem *item = &MenuItems[index];
             item->isSelected = !item->isSelected;
@@ -663,7 +668,6 @@ int pathFound = -1;
 
 void loop()
 {
-    // put your main code here, to run repeatedly:
     switch (progState)
     {
         case ProgState::Init:
@@ -700,7 +704,12 @@ void loop()
                 Serial.println(track2.track);
 
                 char route[100];
+                int sw = millis();
                 int length = place_get_route(track1.track, track2.track, route);
+                int sw2 = millis() - sw;
+                Serial.print("Took: ");
+                Serial.print(sw2);
+                Serial.println(" ms");
                 Serial.print("Route (");
                 Serial.print(length);
                 Serial.print(") -> ");
