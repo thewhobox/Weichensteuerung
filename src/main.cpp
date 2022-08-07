@@ -490,6 +490,29 @@ int lastTrack = -1;
 bool filledScreen = false;
 bool firstPathFinding = false;
 
+
+void switchTrack(Track *t, bool state, bool wait = false)
+{
+    Serial.println("Weiche umgestellt");
+    t->direction = state;
+    t->state = State::Updated;      
+
+    Serial.print("state is ");
+    Serial.println(t->direction ? "on" : "off");
+
+    Serial.printf("Write to %2X\n", t->i2c_addr);
+    byte data = t->nummer; //(addresses[i] & 0b1111) << 1;
+    data = data | t->direction;
+    Serial.print("Data ");
+    Serial.print(data, HEX);
+    Serial.println();
+    Wire.beginTransmission(t->i2c_addr);
+    Wire.write(data);
+    Wire.endTransmission();
+
+    if(wait) delay(100);
+}
+
 void doTracks()
 {
     int TrackCount = (sizeof(tracks) / sizeof(tracks[0]));
@@ -518,15 +541,11 @@ void normalLoop()
     if(millis() - lastTouch > 200 && getTouch(&touchX, &touchY))
     {
         lastTouch = millis();
-        Serial.print("TouchX ");
-        Serial.println(touchX);
 
         if(touchX > 287) //its Menu
         {
             int rest = touchY % 32;
             int index = (touchY - rest) / 32;
-            Serial.print("Index: ");
-            Serial.println(index);
             int menuCount = (sizeof(MenuItems) / sizeof(MenuItems[0]));
             if(index > (menuCount -1)) return;
             MenuItem *item = &MenuItems[index];
@@ -544,21 +563,7 @@ void normalLoop()
 
             if(type > 99) //Nur wenn Type eine Weiche ist (struct > 99)
             {
-                Serial.println("Weiche umgestellt");
-                t->direction = !t->direction;
-                t->state = State::Updated;                
-                Serial.print("state is ");
-                Serial.println(t->direction ? "on" : "off");
-
-                Serial.printf("Write to %2X\n", t->i2c_addr);
-                byte data = t->nummer; //(addresses[i] & 0b1111) << 1;
-                data = data | t->direction;
-                Serial.print("Data ");
-                Serial.print(data, HEX);
-                Serial.println();
-                Wire.beginTransmission(t->i2c_addr);
-                Wire.write(data);
-                Wire.endTransmission();
+                switchTrack(t, !t->direction, true);
             } else if(t->type != Type::Leer && MenuItems[0].isSelected) {
                 if(t->isSelected == Selection::Selected)
                 {
@@ -751,11 +756,6 @@ void loop()
                         {
                             char *fund = strstr(heuhaufen, needle);
                             if(fund == NULL) break;
-
-                            Serial.print("Found TrackSwitch ");
-                            Serial.print(t->track[0]);
-                            Serial.print(" at: ");
-                            Serial.println(fund[1]);
                             heuhaufen = fund + 2;
                             counter += fund[1] - 48;
                         }
@@ -769,17 +769,19 @@ void loop()
                                 else
                                     t->isSelected = Selection::Selected2;
 
-                                t->direction = counter % 2 != 0;
-                                t->state = State::Updated;
+                                bool newState = counter % 2 != 0;
+                                if(t->direction != newState)
+                                {
+                                    switchTrack(t, newState, true);
+                                }
                             } else {
                                 t->isSelected = Selection::Selected;
-                                t->direction = counter != 1;
-                                t->state = State::Updated;
+                                bool newState = counter != 1;
+                                if(t->direction != newState)
+                                {
+                                    switchTrack(t, newState, true);
+                                }
                             }
-
-                            Serial.print("Found ");
-                            Serial.print(counter);
-                            Serial.println(" times");
                         }
                     }
                 }
