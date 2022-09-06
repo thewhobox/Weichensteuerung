@@ -60,9 +60,22 @@ struct Signal
 struct Signal signals[] = {
     {
         .posX = 6,
-        .posY = 8,
+        .posY = 7,
         .i2c_addr = 0x32,
         .nummer = 0 << 1,
+        .position = Position::WN
+    },
+    {
+        .posX = 6,
+        .posY = 8,
+        .i2c_addr = 0x32,
+        .nummer = 1 << 1,
+        .position = Position::WN
+    }, {
+        .posX = 6,
+        .posY = 9,
+        .i2c_addr = 0x32,
+        .nummer = 2 << 1,
         .position = Position::WN
     }
 };
