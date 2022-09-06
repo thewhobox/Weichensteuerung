@@ -38,18 +38,47 @@ enum Selection
     Selected2
 };
 
+enum Position
+{
+    NO,
+    OS,
+    SW,
+    WN
+};
+
+struct Signal
+{
+    const int posX;
+    const int posY;
+    const byte i2c_addr;
+    const byte nummer;
+    bool lightState;
+    State state;
+    Position position;
+};
+
+struct Signal signals[] = {
+    {
+        .posX = 6,
+        .posY = 8,
+        .i2c_addr = 0x32,
+        .nummer = 0 << 1,
+        .position = Position::WN
+    }
+};
+
 struct Track
 {
-        const int posX;
-        const int posY;
-        const byte i2c_addr;
-        const byte nummer;
-        const Type type;
-        const char track[3];
-        const char track2[3];
-        State state;
-        bool direction;
-        Selection isSelected;
+    const int posX;
+    const int posY;
+    const byte i2c_addr;
+    const byte nummer;
+    const Type type;
+    const char track[3];
+    const char track2[3];
+    State state;
+    bool direction;
+    Selection isSelected;
 };
 
 struct Track tracks[] = {

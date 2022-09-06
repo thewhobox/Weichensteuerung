@@ -436,6 +436,36 @@ void drawTrack(Track *t)
     }
 }
 
+void drawSignal(Signal *s)
+{
+    int startX = s->posX * 24;
+    int startY = s->posY * 24;
+
+    switch(s->position)
+    {
+        case Position::NO:
+        {
+            break;
+        }
+        
+        case Position::OS:
+        {
+            break;
+        }
+        
+        case Position::SW:
+        {
+            break;
+        }
+        
+        case Position::WN:
+        {
+            tft.fillCircle(startX + 5, startY + 5, 3, s->lightState ? TFT_GREEN : TFT_RED);
+            break;
+        }
+    }
+}
+
 void drawMenuItem(MenuItem *m, int index)
 {
     tft.fillRect(288, index * 32, 320, index * 32 + 32, TFT_WHITE);
@@ -458,6 +488,23 @@ void handleTrack(Track *t)
         {
            drawTrack(t);
            t->state = State::Untouched;
+           break;
+        }
+
+        case State::Untouched:
+            break;
+    }
+}
+
+void handleSignal(Signal *s)
+{
+    switch(s->state)
+    {
+        case State::Initial:
+        case State::Updated:
+        {
+           drawSignal(s);
+           s->state = State::Untouched;
            break;
         }
 
@@ -522,6 +569,15 @@ void doTracks()
     }
 }
 
+void doSignals()
+{
+    int SignalCount = (sizeof(signals) / sizeof(signals[0]));
+    for(int i = 0; i < SignalCount; i++)
+    {
+        handleSignal(&signals[i]);
+    }
+}
+
 void doMenu()
 {
     int menuCount = (sizeof(MenuItems) / sizeof(MenuItems[0]));
@@ -534,6 +590,7 @@ void doMenu()
 void normalLoop()
 {
     doTracks();
+    doSignals();
     doMenu();
 
     uint16_t touchX;
