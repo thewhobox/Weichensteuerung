@@ -4,6 +4,7 @@
 #include "tracks.h"
 #include "place.h"
 #include "icon_manual.h"
+#include "icon_signal.h"
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -30,7 +31,8 @@ enum ProgState
 
 enum Icons
 {
-    Manual
+    Manual,
+    LightSignal
 };
 
 struct MenuItem {
@@ -44,6 +46,11 @@ struct MenuItem MenuItems[] = {
         .state = State::Initial,
         .isSelected = true,
         .icon = Icons::Manual
+    },
+    {
+        .state = State::Initial,
+        .isSelected = false,
+        .icon = Icons::LightSignal
     }
 };
 
@@ -476,6 +483,11 @@ void drawMenuItem(MenuItem *m, int index)
             tft.drawXBitmap(288, index * 32, icon_manual, 32, 32, m->isSelected ? colorMenuSelected : colorMenu);
             tft.drawLine(288, index * 32 + 31, 320, index * 32 + 31, colorMenuLine);
             break;
+
+        case Icons::LightSignal:
+            tft.drawXBitmap(288, index * 32, icon_signal, 32, 32, m->isSelected ? colorMenuSelected : colorMenu);
+            tft.drawLine(288, index * 32 + 31, 320, index * 32 + 31, colorMenuLine);
+            break;
     }
 }
 
@@ -560,6 +572,26 @@ void switchTrack(Track *t, bool state, bool wait = false)
     if(wait) delay(100);
 }
 
+void switchSignal(Signal *s, bool state)
+{
+    Serial.println("Signal umgestellt");
+    s->lightState = state;
+    s->state = State::Updated;      
+
+    Serial.print("state is ");
+    Serial.println(s->lightState ? "green" : "red");
+
+    Serial.printf("Write to %2X\n", s->i2c_addr);
+    byte data = s->nummer; //(addresses[i] & 0b1111) << 1;
+    data = data | s->lightState;
+    Serial.print("Data ");
+    Serial.print(data, HEX);
+    Serial.println();
+    Wire.beginTransmission(s->i2c_addr);
+    Wire.write(data);
+    Wire.endTransmission();
+}
+
 void doTracks()
 {
     int TrackCount = (sizeof(tracks) / sizeof(tracks[0]));
@@ -614,6 +646,25 @@ void normalLoop()
             rest = touchY % 24;
             int row = (touchY - rest) / 24;
             int counter = col * 10 + row;
+
+            Serial.print("X:");
+            Serial.print(col);
+            Serial.print(" / Y:");
+            Serial.println(row);
+
+            if(MenuItems[1].isSelected)
+            {
+                int SignalCount = (sizeof(signals) / sizeof(signals[0]));
+                for(int i = 0; i < SignalCount; i++)
+                {
+                    if(signals[i].posX == col && signals[i].posY == row)
+                    {
+                        switchSignal(&signals[i], !(signals[i].lightState));
+                        return;
+                    }
+                }
+            }
+
 
             Track *t = &tracks[counter];
             int type = t->type;
