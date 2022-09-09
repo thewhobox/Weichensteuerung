@@ -487,6 +487,8 @@ struct Track tracks[] = {
     {
         .posX = 5,
         .posY = 7,
+        .i2c_addr = 0x30,
+        .nummer = 2 << 1,
         .type = Type::WeicheL270,
         .track = "FX",
         .state = State::Initial
@@ -494,7 +496,7 @@ struct Track tracks[] = {
     {
         .posX = 5,
         .posY = 8,
-        .i2c_addr = 0x31,
+        .i2c_addr = 0x30,
         .nummer = 1 << 1,
         .type = Type::Kreuz,
         .track = "EX",
@@ -503,7 +505,7 @@ struct Track tracks[] = {
     {
         .posX = 5,
         .posY = 9,
-        .i2c_addr = 0x31,
+        .i2c_addr = 0x30,
         .nummer = 0 << 1,
         .type = Type::WeicheL90,
         .track = "BX",
@@ -697,8 +699,8 @@ struct Track tracks[] = {
     {
         .posX = 8,
         .posY = 8,
-        .i2c_addr = 0x30,
-        .nummer = 1 << 1,
+        .i2c_addr = 0x31,
+        .nummer = 0 << 1,
         .type = Type::Kreuz90,
         .track = "DX",
         .state = State::Initial
@@ -706,8 +708,8 @@ struct Track tracks[] = {
     {
         .posX = 8,
         .posY = 9,
-        .i2c_addr = 0x30,
-        .nummer = 0 << 1,
+        .i2c_addr = 0x31,
+        .nummer = 4 << 1,
         .type = Type::WeicheR270,
         .track = "CX",
         .state = State::Initial
