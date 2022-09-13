@@ -206,6 +206,8 @@ struct Track tracks[] = {
     {
         .posX = 1,
         .posY = 6,
+        .i2c_addr = 0x33,
+        .nummer = 1 << 1,
         .type = Type::WeicheL,
         .track = "AX",
         .state = State::Initial
@@ -338,6 +340,8 @@ struct Track tracks[] = {
     {
         .posX = 3,
         .posY = 5,
+        .i2c_addr = 0x33,
+        .nummer = 0 << 1,
         .type = Type::WeicheR,
         .track = "HX",
         .state = State::Initial
@@ -709,7 +713,7 @@ struct Track tracks[] = {
         .posX = 8,
         .posY = 9,
         .i2c_addr = 0x31,
-        .nummer = 4 << 1,
+        .nummer = 3 << 1,
         .type = Type::WeicheR270,
         .track = "CX",
         .state = State::Initial
