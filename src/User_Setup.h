@@ -5,7 +5,7 @@
 #define TFT_CS   PIN_D8  // Chip select control pin D8
 #define TFT_DC   PIN_D3  // Data Command control pin
 #define TFT_RST  PIN_D4  // Reset pin (could connect to NodeMCU RST, see next line)
-#define TOUCH_CS PIN_D0LASH space only enable the fonts you need!
+#define TOUCH_CS PIN_D0  // FLASH space only enable the fonts you need!
 
 #define LOAD_GLCD   // Font 1. Original Adafruit 8 pixel font needs ~1820 bytes in FLASH
 //#define LOAD_FONT2  // Font 2. Small 16 pixel high font, needs ~3534 bytes in FLASH, 96 characters

@@ -36,19 +36,19 @@ enum Icons
 };
 
 struct MenuItem {
-    State state;
+    bool isUpdated;
     bool isSelected;
     const Icons icon;
 };
 
 struct MenuItem MenuItems[] = {
     {
-        .state = State::Initial,
+        .isUpdated = true,
         .isSelected = true,
         .icon = Icons::Manual
     },
     {
-        .state = State::Initial,
+        .isUpdated = true,
         .isSelected = false,
         .icon = Icons::LightSignal
     }
@@ -77,12 +77,16 @@ bool getTouch(uint16_t *x, uint16_t *y)
 int lineThickness = 2;
 uint32_t colorTrack = TFT_BLACK;
 uint32_t colorSelected = TFT_GREEN; //TFT_ORANGE;
+uint32_t colorBlocked = TFT_RED;
 uint32_t colorMenu = TFT_BLACK;
 uint32_t colorMenuSelected = TFT_ORANGE;
 uint32_t colorMenuLine = TFT_DARKGREEN;
 
 void drawTrack(Track *t)
 {
+    uint32_t trackColor1 = t->isTrack1Selected ? colorSelected : colorTrack;
+    uint32_t trackColor2 = t->isTrack2Selected ? colorSelected : colorTrack;
+
     switch(t->type)
     {
         case Type::Gerade:
@@ -92,7 +96,7 @@ void drawTrack(Track *t)
                 int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int y1 = t->posY * 24;
                 int y2 = (t->posY * 24) + 23;
-                tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x, y1, x, y2, trackColor1);
             }
             break;
         }
@@ -104,7 +108,7 @@ void drawTrack(Track *t)
                 int x1 = t->posX * 24;
                 int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int x2 = (t->posX * 24) + 23;
-                tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x1, y, x2, y, trackColor1);
             }
             break;
         }
@@ -117,7 +121,7 @@ void drawTrack(Track *t)
                 int x2 = (t->posX * 24) + 23;
                 int y1 = t->posY * 24;
                 int y2 = (t->posY * 24) + 11 + (lineThickness / 2) - i;
-                tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x1, y1, x2, y2, trackColor1);
             }
             break;
         }
@@ -129,7 +133,7 @@ void drawTrack(Track *t)
                 int y1 = (t->posY * 24) + 23;
                 int x2 = (t->posX * 24) + 23;
                 int y2 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x1, y1, x2, y2, trackColor1);
             }
             break;
         }
@@ -142,7 +146,7 @@ void drawTrack(Track *t)
                 int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int x2 = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int y2 = (t->posY * 24) + 23;
-                tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x1, y1, x2, y2, trackColor1);
             }
             break;
         }
@@ -155,7 +159,7 @@ void drawTrack(Track *t)
                 int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int x2 = (t->posX * 24)+ 11 - ((lineThickness - 2) / 2) + i;
                 int y2 = (t->posY * 24);
-                tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x1, y1, x2, y2, trackColor1);
             }
             break;
         }
@@ -167,17 +171,17 @@ void drawTrack(Track *t)
                 int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int y1 = t->posY * 24;
                 int y2 = (t->posY * 24) + 23;
-                tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x, y1, x, y2, trackColor1);
 
                 int x1 = t->posX * 24;
                 int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int x2 = (t->posX * 24) + 7;
-                tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                tft.drawLine(x1, y, x2, y, trackColor2);
                 
                 x1 = t->posX * 24 + 16;
                 y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 x2 = (t->posX * 24) + 23;
-                tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                tft.drawLine(x1, y, x2, y, trackColor2);
             }
             break;
         }
@@ -189,17 +193,17 @@ void drawTrack(Track *t)
                 int x1 = t->posX * 24;
                 int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int x2 = (t->posX * 24) + 23;
-                tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                tft.drawLine(x1, y, x2, y, trackColor1);
                 
                 int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 int y1 = t->posY * 24;
                 int y2 = (t->posY * 24) + 7;
-                tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                tft.drawLine(x, y1, x, y2, trackColor2);
                 
                 x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                 y1 = t->posY * 24 + 16;
                 y2 = (t->posY * 24) + 23;
-                tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                tft.drawLine(x, y1, x, y2, trackColor2);
             }
             break;
         }
@@ -217,12 +221,12 @@ void drawTrack(Track *t)
                     int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int y2 = (t->posY * 24) + 23;
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
                 } else {
                     int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int y1 = t->posY * 24;
                     int y2 = (t->posY * 24) + 23;
-                    tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x, y1, x, y2, trackColor1);
                 }
             }
             break;
@@ -241,19 +245,38 @@ void drawTrack(Track *t)
                     int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24)+ 11 - ((lineThickness - 2) / 2) + i;
                     int y2 = (t->posY * 24);
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
                 } else {
                     int x1 = t->posX * 24;
                     int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24) + 23;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y, x2, y, trackColor1);
                 }
             }
             break;
         }
 
         case Type::WeicheL180:
-            Serial.println("WeicheL180 wird noch nicht unterstützt");
+            tft.fillRect(t->posX * 24, t->posY * 24, 24, 24, TFT_WHITE);
+            tft.drawRect(t->posX * 24, t->posY * 24, 24, 24, TFT_BLUE);
+
+            for(int i = 0; i < lineThickness; i ++)
+            {
+                if(t->direction)
+                {
+                    int x1 = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int x2 = (t->posX * 24) + 23;
+                    int y1 = t->posY * 24;
+                    int y2 = (t->posY * 24) + 11 + (lineThickness / 2) - i;
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
+                } else {
+                    int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int y1 = t->posY * 24;
+                    int y2 = (t->posY * 24) + 23;
+                    tft.drawLine(x, y1, x, y2, trackColor1);
+                }
+            }
+            break;
             break;
 
         case Type::WeicheL270:
@@ -269,12 +292,12 @@ void drawTrack(Track *t)
                     int y1 = (t->posY * 24) + 23;
                     int x2 = (t->posX * 24) + 23;
                     int y2 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
                 } else {
                     int x1 = t->posX * 24;
                     int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24) + 23;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y, x2, y, trackColor1);
                 }
             }
             break;
@@ -293,12 +316,12 @@ void drawTrack(Track *t)
                     int y1 = (t->posY * 24) + 23;
                     int x2 = (t->posX * 24) + 23;
                     int y2 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
                 } else {
         	        int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int y1 = t->posY * 24;
                     int y2 = (t->posY * 24) + 23;
-                    tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x, y1, x, y2, trackColor1);
                 }
             }
             break;
@@ -317,23 +340,62 @@ void drawTrack(Track *t)
                     int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24)+ 11 - ((lineThickness - 2) / 2) + i;
                     int y2 = (t->posY * 24);
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
                 } else {
                     int x1 = t->posX * 24;
                     int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24) + 23;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y, x2, y, trackColor1);
                 }
             }
             break;
         }
 
         case Type::WeicheR90:
-            Serial.println("WeicheR90 wird noch nicht unterstützt");
+        {
+            tft.fillRect(t->posX * 24, t->posY * 24, 24, 24, TFT_WHITE);
+            tft.drawRect(t->posX * 24, t->posY * 24, 24, 24, TFT_BLUE);
+
+            for(int i = 0; i < lineThickness; i ++)
+            {
+                if(t->direction)
+                {
+                    int x1 = t->posX * 24;
+                    int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int x2 = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int y2 = (t->posY * 24) + 23;
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
+                } else {
+                    int x1 = t->posX * 24;
+                    int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int x2 = (t->posX * 24) + 23;
+                    tft.drawLine(x1, y, x2, y, trackColor1);
+                }
+            }
             break;
+        }
 
         case Type::WeicheR180:
-            Serial.println("WeicheR180 wird noch nicht unterstützt");
+            tft.fillRect(t->posX * 24, t->posY * 24, 24, 24, TFT_WHITE);
+            tft.drawRect(t->posX * 24, t->posY * 24, 24, 24, TFT_BLUE);
+
+            for(int i = 0; i < lineThickness; i ++)
+            {
+                if(t->direction)
+                {
+                    int x1 = (t->posX * 24);
+                    int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int x2 = (t->posX * 24)+ 11 - ((lineThickness - 2) / 2) + i;
+                    int y2 = (t->posY * 24);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
+                } else {
+        	        int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int y1 = t->posY * 24;
+                    int y2 = (t->posY * 24) + 23;
+                    tft.drawLine(x, y1, x, y2, trackColor1);
+                }
+            }
+            break;
             break;
 
         
@@ -350,52 +412,12 @@ void drawTrack(Track *t)
                     int x2 = (t->posX * 24) + 23;
                     int y1 = t->posY * 24;
                     int y2 = (t->posY * 24) + 11 + (lineThickness / 2) - i;
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
                 } else {
         	        int x1 = t->posX * 24;
                     int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24) + 23;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
-                }
-            }
-            break;
-        }
-        
-        case Type::Kreuz:
-        {
-            tft.fillRect(t->posX * 24, t->posY * 24, 24, 24, TFT_WHITE);
-            tft.drawRect(t->posX * 24, t->posY * 24, 24, 24, TFT_BLUE);
-
-            for(int i = 0; i < lineThickness; i ++)
-            {
-                if(t->direction)
-                {
-                    int x1 = (t->posX * 24);
-                    int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    int x2 = (t->posX * 24)+ 11 - ((lineThickness - 2) / 2) + i;
-                    int y2 = (t->posY * 24);
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
-
-                    x1 = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    y1 = (t->posY * 24) + 23;
-                    x2 = (t->posX * 24) + 23;
-                    y2 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
-                } else {
-        	        int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    int y1 = t->posY * 24;
-                    int y2 = (t->posY * 24) + 23;
-                    tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
-
-                    int x1 = t->posX * 24;
-                    int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    int x2 = (t->posX * 24) + 7;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
-                    
-                    x1 = t->posX * 24 + 16;
-                    y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
-                    x2 = (t->posX * 24) + 23;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y, x2, y, trackColor1);
                 }
             }
             break;
@@ -414,33 +436,76 @@ void drawTrack(Track *t)
                     int x2 = (t->posX * 24) + 23;
                     int y1 = t->posY * 24;
                     int y2 = (t->posY * 24) + 11 + (lineThickness / 2) - i;
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
 
                     x1 = t->posX * 24;
                     y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     x2 = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     y2 = (t->posY * 24) + 23;
-                    tft.drawLine(x1, y1, x2, y2, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y1, x2, y2, trackColor2);
                 } else {
         	        int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int y1 = t->posY * 24;
                     int y2 = (t->posY * 24) + 23;
-                    tft.drawLine(x, y1, x, y2, t->isSelected == Selection::Selected ? colorSelected : colorTrack);
+                    tft.drawLine(x, y1, x, y2, trackColor1);
 
                     int x1 = t->posX * 24;
                     int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     int x2 = (t->posX * 24) + 7;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y, x2, y, trackColor2);
                     
                     x1 = t->posX * 24 + 16;
                     y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
                     x2 = (t->posX * 24) + 23;
-                    tft.drawLine(x1, y, x2, y, t->isSelected == Selection::Selected2 ? colorSelected : colorTrack);
+                    tft.drawLine(x1, y, x2, y, trackColor2);
                 }
             }
             break;
         }
+
+        case Type::Kreuz270:
+        {
+            tft.fillRect(t->posX * 24, t->posY * 24, 24, 24, TFT_WHITE);
+            tft.drawRect(t->posX * 24, t->posY * 24, 24, 24, TFT_BLUE);
+
+            for(int i = 0; i < lineThickness; i ++)
+            {
+                if(t->direction)
+                {
+                    int x1 = (t->posX * 24);
+                    int y1 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int x2 = (t->posX * 24)+ 11 - ((lineThickness - 2) / 2) + i;
+                    int y2 = (t->posY * 24);
+                    tft.drawLine(x1, y1, x2, y2, trackColor2);
+
+                    x1 = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    y1 = (t->posY * 24) + 23;
+                    x2 = (t->posX * 24) + 23;
+                    y2 = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    tft.drawLine(x1, y1, x2, y2, trackColor1);
+                } else {
+        	        int x = (t->posX * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int y1 = t->posY * 24;
+                    int y2 = (t->posY * 24) + 23;
+                    tft.drawLine(x, y1, x, y2, trackColor1);
+
+                    int x1 = t->posX * 24;
+                    int y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    int x2 = (t->posX * 24) + 7;
+                    tft.drawLine(x1, y, x2, y, trackColor2);
+                    
+                    x1 = t->posX * 24 + 16;
+                    y = (t->posY * 24) + 11 - ((lineThickness - 2) / 2) + i;
+                    x2 = (t->posX * 24) + 23;
+                    tft.drawLine(x1, y, x2, y, trackColor2);
+                }
+            }
+            break;
+        }
+        
     }
+
+    t->isUpdated = false;
 }
 
 void drawSignal(Signal *s)
@@ -471,6 +536,8 @@ void drawSignal(Signal *s)
             break;
         }
     }
+
+    s->isUpdated = false;
 }
 
 void drawMenuItem(MenuItem *m, int index)
@@ -489,57 +556,8 @@ void drawMenuItem(MenuItem *m, int index)
             tft.drawLine(288, index * 32 + 31, 320, index * 32 + 31, colorMenuLine);
             break;
     }
-}
 
-void handleTrack(Track *t)
-{
-    switch(t->state)
-    {
-        case State::Initial:
-        case State::Updated:
-        {
-           drawTrack(t);
-           t->state = State::Untouched;
-           break;
-        }
-
-        case State::Untouched:
-            break;
-    }
-}
-
-void handleSignal(Signal *s)
-{
-    switch(s->state)
-    {
-        case State::Initial:
-        case State::Updated:
-        {
-           drawSignal(s);
-           s->state = State::Untouched;
-           break;
-        }
-
-        case State::Untouched:
-            break;
-    }
-}
-
-void handleMenu(MenuItem *m, int index)
-{
-    switch(m->state)
-    {
-        case State::Initial:
-        case State::Updated:
-        {
-           drawMenuItem(m, index);
-           m->state = State::Untouched;
-           break;
-        }
-
-        case State::Untouched:
-            break;
-    }
+    m->isUpdated = false;
 }
 
 int lastTouch = 0;
@@ -552,19 +570,19 @@ bool firstPathFinding = false;
 
 void switchTrack(Track *t, bool state, bool wait = false)
 {
-    Serial.println("Weiche umgestellt");
+    //Serial.println("Weiche umgestellt");
     t->direction = state;
-    t->state = State::Updated;      
+    t->isUpdated = true;
 
-    Serial.print("state is ");
-    Serial.println(t->direction ? "on" : "off");
+    //Serial.print("state is ");
+    //Serial.println(t->direction ? "on" : "off");
 
-    Serial.printf("Write to %2X\n", t->i2c_addr);
+    //Serial.printf("Write to %2X\n", t->i2c_addr);
     byte data = t->nummer; //(addresses[i] & 0b1111) << 1;
     data = data | t->direction;
-    Serial.print("Data ");
-    Serial.print(data, HEX);
-    Serial.println();
+    //Serial.print("Data ");
+    //Serial.print(data, HEX);
+    //Serial.println();
     Wire.beginTransmission(t->i2c_addr);
     Wire.write(data);
     Wire.endTransmission();
@@ -576,7 +594,7 @@ void switchSignal(Signal *s, bool state)
 {
     Serial.println("Signal umgestellt");
     s->lightState = state;
-    s->state = State::Updated;      
+    s->isUpdated = true;  
 
     Serial.print("state is ");
     Serial.println(s->lightState ? "green" : "red");
@@ -597,7 +615,8 @@ void doTracks()
     int TrackCount = (sizeof(tracks) / sizeof(tracks[0]));
     for(int i = 0; i < TrackCount; i++)
     {
-        handleTrack(&tracks[i]);
+        if(tracks[i].isUpdated)
+            drawTrack(&tracks[i]);
     }
 }
 
@@ -606,7 +625,8 @@ void doSignals()
     int SignalCount = (sizeof(signals) / sizeof(signals[0]));
     for(int i = 0; i < SignalCount; i++)
     {
-        handleSignal(&signals[i]);
+        if(signals[i].isUpdated)
+           drawSignal(&signals[i]);
     }
 }
 
@@ -615,7 +635,8 @@ void doMenu()
     int menuCount = (sizeof(MenuItems) / sizeof(MenuItems[0]));
     for(int i = 0; i < menuCount; i++)
     {
-        handleMenu(&MenuItems[i], i);
+        if(MenuItems[i].isUpdated)
+           drawMenuItem(&MenuItems[i], i);
     }
 }
 
@@ -639,7 +660,7 @@ void normalLoop()
             if(index > (menuCount -1)) return;
             MenuItem *item = &MenuItems[index];
             item->isSelected = !item->isSelected;
-            item->state = State::Updated;
+            item->isUpdated = true;
         } else { //its track
             int rest = touchX % 24;
             int col = (touchX - rest) / 24;
@@ -673,14 +694,14 @@ void normalLoop()
             {
                 switchTrack(t, !t->direction, true);
             } else if(t->type != Type::Leer && MenuItems[0].isSelected) {
-                if(t->isSelected == Selection::Selected)
+                if(t->isTrack1Selected)
                 {
-                    t->isSelected = Selection::NotSelected;
-                    t->state = State::Updated;
+                    t->isTrack1Selected = false;
+                    t->isUpdated = true;
                     firstTrack = -1;
                 } else {
-                    t->isSelected = Selection::Selected;
-                    t->state = State::Updated;
+                    t->isTrack1Selected = true;
+                    t->isUpdated = true;
                     if(firstTrack == -1)
                     {
                         firstTrack = counter;
@@ -700,43 +721,43 @@ void normalLoop()
 void addTrackSwitch(char name){
     char buffer[3];
     buffer[0] = name;
-    buffer[1] = '0';
+    buffer[1] = '4';
     buffer[2] = '\0';
-    place *p1 = place_new(buffer);
-    buffer[1] = '1';
-    place *p2 = place_new(buffer);
-    buffer[1] = '2';
-    place *p3 = place_new(buffer);
+    place *p4 = place_new(buffer);
+    buffer[1] = '7';
+    place *p7 = place_new(buffer);
+    buffer[1] = '6';
+    place *p6 = place_new(buffer);
 
-    place_add_way(p1, p2, 0);
-    place_add_way(p2, p1, 0);
-    place_add_way(p1, p3, 0);
-    place_add_way(p3, p1, 0);
+    place_add_way(p4, p7, 0);
+    place_add_way(p7, p4, 0);
+    place_add_way(p4, p6, 0);
+    place_add_way(p6, p4, 0);
 }
 
 void addTrackSwitchCross(char name)
 {
     char buffer[3];
     buffer[0] = name;
-    buffer[1] = '3';
+    buffer[1] = '7';
     buffer[2] = '\0';
-    place *p3 = place_new(buffer);
-    buffer[1] = '4';
-    place *p4 = place_new(buffer);
+    place *p7 = place_new(buffer);
+    buffer[1] = '6';
+    place *p6 = place_new(buffer);
     buffer[1] = '5';
     place *p5 = place_new(buffer);
     buffer[1] = '8';
     place *p8 = place_new(buffer);
 
-    place_add_way(p3, p5, 0);
-    place_add_way(p5, p3, 0);
-    place_add_way(p3, p8, 0);
-    place_add_way(p8, p3, 0);
+    place_add_way(p7, p5, 0);
+    place_add_way(p5, p7, 0);
+    place_add_way(p7, p8, 0);
+    place_add_way(p8, p7, 0);
     
-    place_add_way(p4, p8, 0);
-    place_add_way(p8, p4, 0);
-    place_add_way(p4, p5, 0);
-    place_add_way(p5, p4, 0);
+    place_add_way(p6, p8, 0);
+    place_add_way(p8, p6, 0);
+    place_add_way(p6, p5, 0);
+    place_add_way(p5, p6, 0);
 }
 
 void connectTracks(char *start, char *end, int distance)
@@ -748,33 +769,25 @@ void connectTracks(char *start, char *end, int distance)
 }
 
 void initPath() {
+    //addTrackSwitch('C');
+    //addTrackSwitchCross('E');
+    //place_new("Y1");
+    //connectTracks("A0", "B0", 5); //x1
+
     addTrackSwitch('A');
-    addTrackSwitch('B');
+    addTrackSwitchCross('B');
     addTrackSwitch('C');
-    addTrackSwitchCross('D');
+    addTrackSwitch('D');
     addTrackSwitchCross('E');
     addTrackSwitch('F');
-    addTrackSwitch('G');
-    addTrackSwitch('H');
-    addTrackSwitch('I');
-    //standalone places
-    place_new("Y1");
 
-
-    connectTracks("A0", "B0", 5); //x1
-    connectTracks("B1", "C1", 5); //x2
-    connectTracks("B2", "E4", 1); //x3
-    connectTracks("E5", "D5", 5); //x4
-    connectTracks("D4", "C2", 1); //x5
-    connectTracks("E8", "F2", 1); //x6
-    connectTracks("F0", "D8", 5); //x7
-    connectTracks("D3", "G0", 5); //x8
-    connectTracks("H0", "F1", 5); //x9
-    connectTracks("H2", "I0", 5); //x10
-    //standalone ways
-    connectTracks("Y1", "I1", 5); //x11
-    connectTracks("Y1", "I2", 5); //x12
-
+    connectTracks("A6", "F6", 5);
+    connectTracks("A7", "B8", 2);
+    connectTracks("B7", "E7", 4);
+    connectTracks("E8", "F7", 2);
+    connectTracks("B6", "C7", 2);
+    connectTracks("C4", "D4", 3);
+    connectTracks("D7", "E6", 2);
 }
 
 int pathFound = -1;
@@ -811,29 +824,28 @@ void loop()
                 Track track1 = tracks[firstTrack];
                 Track track2 = tracks[lastTrack];
 
-                Serial.print("Start: ");
-                Serial.println(track1.track);
-                Serial.print("Stop: ");
+                Serial.print("Planned: ");
+                Serial.print(track1.track);
+                Serial.print(" -> ");
                 Serial.println(track2.track);
 
                 char route[100];
                 int sw = millis();
                 int length = place_get_route(track1.track, track2.track, route);
                 int sw2 = millis() - sw;
-                Serial.print("Took: ");
-                Serial.print(sw2);
-                Serial.println(" ms");
                 Serial.print("Route (");
                 Serial.print(length);
-                Serial.print(") -> ");
+                Serial.print(" e, ");
+                Serial.print(sw2);
+                Serial.print(" ms) -> ");
                 Serial.println(route);
 
                 char needle[5];
                 int trackCount = (sizeof(tracks) / sizeof(tracks[0]));
+
                 for(int i = 0; i < trackCount; i++)
                 {
                     Track *t = &tracks[i];
-
 
                     if(t->type < 100)
                     {
@@ -841,8 +853,8 @@ void loop()
 
                         if(strlen(t->track) > 1 && strstr(route, needle) != NULL)
                         {
-                            t->isSelected = Selection::Selected;
-                            t->state = State::Updated;
+                            t->isTrack1Selected = true;
+                            t->isUpdated = true;
                         }
                         if(t->type == Type::Tunnel || t->type == Type::Tunnel90)
                         {
@@ -850,44 +862,52 @@ void loop()
 
                             if(strlen(t->track2) > 1 && strstr(route, needle) != NULL)
                             {
-                                t->isSelected = Selection::Selected2;
-                                t->state = State::Updated;
+                                t->isTrack2Selected = true;
+                                t->isUpdated = true;
                             }
                         }
                     } else {
-                        needle[0] = t->track[0];
-                        needle[1] = '\0';
-                        char *heuhaufen = route;
-                        int counter = 0;
-                        
-                        while(true)
+                        if(strlen(t->track) > 1)
                         {
-                            char *fund = strstr(heuhaufen, needle);
-                            if(fund == NULL) break;
-                            heuhaufen = fund + 2;
-                            counter += fund[1] - 48;
-                        }
-
-                        if(counter > 0)
-                        {
-                            if(t->type >= 200)
+                            needle[0] = t->track[0];
+                            needle[1] = '\0';
+                            char *heuhaufen = route;
+                            int counter = 0;
+                            
+                            while(true)
                             {
-                                if(counter == 11 || counter == 12)
-                                    t->isSelected = Selection::Selected;
-                                else
-                                    t->isSelected = Selection::Selected2;
+                                char *fund = strstr(heuhaufen, needle);
+                                if(fund == NULL) break;
+                                heuhaufen = fund + 2;
+                                counter += fund[1] - 48;
+                            }
 
+                            Serial.print(t->track[0]);
+                            Serial.print(" found ");
+                            Serial.println(counter);
+
+                            if(counter > 9)
+                            {
                                 bool newState = counter % 2 != 0;
-                                if(t->direction != newState)
+                                t->isUpdated = true;
+                                
+                                if(t->type >= 200)
                                 {
-                                    switchTrack(t, newState, true);
-                                }
-                            } else {
-                                t->isSelected = Selection::Selected;
-                                bool newState = counter != 1;
-                                if(t->direction != newState)
-                                {
-                                    switchTrack(t, newState, true);
+                                    if(counter == 15 || counter == 12)
+                                        t->isTrack1Selected = true;
+                                    else
+                                        t->isTrack2Selected = true;
+
+                                    if(t->direction != newState)
+                                    {
+                                        switchTrack(t, newState, true);
+                                    }
+                                } else {
+                                    t->isTrack1Selected = true;
+                                    if(t->direction != newState)
+                                    {
+                                        switchTrack(t, newState, true);
+                                    }
                                 }
                             }
                         }
@@ -896,16 +916,21 @@ void loop()
 
                 pathFound = millis();
             } else {
-                if(millis() - pathFound > 5000)
+                if(millis() - pathFound > 2000)
                 {
                     int trackCount = (sizeof(tracks) / sizeof(tracks[0]));
                     for(int i = 0; i < trackCount; i++)
                     {
                         Track *t = &tracks[i];
-                        if(t->isSelected)
+                        if(t->isTrack1Selected)
                         {
-                            t->isSelected = Selection::NotSelected;
-                            t->state = State::Updated;
+                            t->isTrack1Selected = false;
+                            t->isUpdated = true;
+                        }
+                        if(t->isTrack2Selected)
+                        {
+                            t->isTrack2Selected = false;
+                            t->isUpdated = true;
                         }
                     }
                     
