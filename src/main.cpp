@@ -19,6 +19,9 @@ void setup()
     tft.setRotation(3);
 
     uint16_t calData[5] = { 323, 3338, 395, 3323, 3 };
+
+    //tft.calibrateTouch(calData, TFT_RED, TFT_WHITE, 10);
+
     tft.setTouch(calData);
 }
 
@@ -71,6 +74,7 @@ bool getTouch(uint16_t *x, uint16_t *y)
         *y = -0.075 * y2 + 9.725 + y2;
     }
     return touched;
+    return false;
 }
 
 
@@ -570,15 +574,15 @@ bool firstPathFinding = false;
 
 void switchTrack(Track *t, bool state, bool wait = false)
 {
-    //Serial.println("Weiche umgestellt");
+    Serial.println("Weiche umgestellt");
     t->direction = state;
     t->isUpdated = true;
 
-    //Serial.print("state is ");
-    //Serial.println(t->direction ? "on" : "off");
+    Serial.print("state is ");
+    Serial.println(t->direction ? "on" : "off");
 
-    //Serial.printf("Write to %2X\n", t->i2c_addr);
-    byte data = t->nummer; //(addresses[i] & 0b1111) << 1;
+    Serial.printf("Write to %2X\n", t->i2c_addr);
+    byte data = t->nummer << 1; //(addresses[i] & 0b1111) << 1;
     data = data | t->direction;
     //Serial.print("Data ");
     //Serial.print(data, HEX);
@@ -781,6 +785,7 @@ void initPath() {
     addTrackSwitchCross('E');
     addTrackSwitch('F');
 
+    //Big Connection West
     connectTracks("A6", "F6", 5);
     connectTracks("A7", "B8", 2);
     connectTracks("B7", "E7", 4);
@@ -788,6 +793,19 @@ void initPath() {
     connectTracks("B6", "C7", 2);
     connectTracks("C4", "D4", 3);
     connectTracks("D7", "E6", 2);
+
+    addTrackSwitch('G');
+    addTrackSwitchCross('H');
+    addTrackSwitch('I');
+
+    //Big Connection South
+    connectTracks("G7", "H8", 2);
+    connectTracks("H6", "I7", 2);
+
+    //Connect Big West and South
+    connectTracks("F4", "G4", 5);
+    connectTracks("E5", "H5", 5);
+    connectTracks("D6", "I6", 5);
 }
 
 int pathFound = -1;

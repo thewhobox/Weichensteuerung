@@ -116,6 +116,8 @@ struct Track tracks[] = {
     {
         .posX = 0,
         .posY = 4,
+        .i2c_addr = 0x31,
+        .nummer = 3,
         .type = Type::WeicheR,
         .track = "CX",
         .isUpdated = true
@@ -130,6 +132,8 @@ struct Track tracks[] = {
     {
         .posX = 0,
         .posY = 6,
+        .i2c_addr = 0x30,
+        .nummer = 2,
         .type = Type::WeicheL180,
         .track = "DX",
         .isUpdated = true
@@ -184,6 +188,8 @@ struct Track tracks[] = {
     {
         .posX = 1,
         .posY = 4,
+        .i2c_addr = 0x31,
+        .nummer = 0,
         .type = Type::Kreuz270,
         .track = "BX",
         .isUpdated = true
@@ -198,6 +204,8 @@ struct Track tracks[] = {
     {
         .posX = 1,
         .posY = 6,
+        .i2c_addr = 0x30,
+        .nummer = 3,
         .type = Type::Kreuz90,
         .track = "EX",
         .isUpdated = true
@@ -220,6 +228,7 @@ struct Track tracks[] = {
         .posX = 1,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I6",
         .isUpdated = true
     },
     //---------Spalte 2
@@ -265,6 +274,8 @@ struct Track tracks[] = {
     {
         .posX = 2,
         .posY = 6,
+        .i2c_addr = 0x30,
+        .nummer = 0,
         .type = Type::WeicheL,
         .track = "FX",
         .isUpdated = true
@@ -280,12 +291,14 @@ struct Track tracks[] = {
         .posX = 2,
         .posY = 8,
         .type = Type::Gerade90,
+        .track = "H5",
         .isUpdated = true
     },
     {
         .posX = 2,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I6",
         .isUpdated = true
     },
     //---------Spalte 3
@@ -334,18 +347,21 @@ struct Track tracks[] = {
         .posX = 3,
         .posY = 7,
         .type = Type::Gerade90,
+        .track = "G4",
         .isUpdated = true
     },
     {
         .posX = 3,
         .posY = 8,
         .type = Type::Gerade90,
+        .track = "H5",
         .isUpdated = true
     },
     {
         .posX = 3,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I6",
         .isUpdated = true
     },
     //---------Spalte 4
@@ -393,18 +409,21 @@ struct Track tracks[] = {
         .posX = 4,
         .posY = 7,
         .type = Type::Gerade90,
+        .track = "G4",
         .isUpdated = true
     },
     {
         .posX = 4,
         .posY = 8,
         .type = Type::Gerade90,
+        .track = "H5",
         .isUpdated = true
     },
     {
         .posX = 4,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I6",
         .isUpdated = true
     },
     //---------Spalte 5
@@ -454,18 +473,21 @@ struct Track tracks[] = {
         .posX = 5,
         .posY = 7,
         .type = Type::Gerade90,
+        .track = "G4",
         .isUpdated = true
     },
     {
         .posX = 5,
         .posY = 8,
         .type = Type::Gerade90,
+        .track = "H5",
         .isUpdated = true
     },
     {
         .posX = 5,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I6",
         .isUpdated = true
     },
     //---------Spalte 6
@@ -514,18 +536,21 @@ struct Track tracks[] = {
         .posX = 6,
         .posY = 7,
         .type = Type::Gerade90,
+        .track = "G4",
         .isUpdated = true
     },
     {
         .posX = 6,
         .posY = 8,
         .type = Type::Gerade90,
+        .track = "H5",
         .isUpdated = true
     },
     {
         .posX = 6,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I6",
         .isUpdated = true
     },
     //---------Spalte 7
@@ -572,19 +597,28 @@ struct Track tracks[] = {
     {
         .posX = 7,
         .posY = 7,
+        .i2c_addr = 0x32,
+        .nummer = 3,
         .type = Type::WeicheR90,
+        .track = "GX",
         .isUpdated = true
     },
     {
         .posX = 7,
         .posY = 8,
+        .i2c_addr = 0x32,
+        .nummer = 2,
         .type = Type::Kreuz90,
+        .track = "HX",
         .isUpdated = true
     },
     {
         .posX = 7,
         .posY = 9,
+        .i2c_addr = 0x32,
+        .nummer = 0,
         .type = Type::WeicheR270,
+        .track = "IX",
         .isUpdated = true
     },
     //---------Spalte 8
@@ -634,18 +668,21 @@ struct Track tracks[] = {
         .posX = 8,
         .posY = 7,
         .type = Type::WeicheL90,
+        .track = "JX",
         .isUpdated = true
     },
     {
         .posX = 8,
         .posY = 8,
         .type = Type::Gerade90,
+        .track = "H7",
         .isUpdated = true
     },
     {
         .posX = 8,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I4",
         .isUpdated = true
     },
     //---------Spalte 9
@@ -695,18 +732,21 @@ struct Track tracks[] = {
         .posX = 9,
         .posY = 7,
         .type = Type::Kurve270,
+        .track = "J6",
         .isUpdated = true
     },
     {
         .posX = 9,
         .posY = 8,
         .type = Type::Gerade90,
+        .track = "H7",
         .isUpdated = true
     },
     {
         .posX = 9,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I4",
         .isUpdated = true
     },
     //---------Spalte 10
@@ -762,12 +802,14 @@ struct Track tracks[] = {
         .posX = 10,
         .posY = 8,
         .type = Type::Kurve270,
+        .track = "H7",
         .isUpdated = true
     },
     {
         .posX = 10,
         .posY = 9,
         .type = Type::Gerade90,
+        .track = "I4",
         .isUpdated = true
     },
     //---------Spalte 11
@@ -829,6 +871,7 @@ struct Track tracks[] = {
         .posX = 11,
         .posY = 9,
         .type = Type::Kurve270,
+        .track = "I4",
         .isUpdated = true
     },
 };
