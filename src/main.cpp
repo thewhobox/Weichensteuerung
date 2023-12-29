@@ -5,6 +5,7 @@
 #include "place.h"
 #include "icon_manual.h"
 #include "icon_signal.h"
+#include "icon_tardis.h"
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -60,9 +61,6 @@ struct MenuItem MenuItems[] = {
 int progState = ProgState::Init;
 int stateCount = 0;
 
-
-
-
 bool getTouch(uint16_t *x, uint16_t *y)
 {
     uint16_t x2;
@@ -76,7 +74,6 @@ bool getTouch(uint16_t *x, uint16_t *y)
     return touched;
     return false;
 }
-
 
 int lineThickness = 2;
 uint32_t colorTrack = TFT_BLACK;
@@ -786,11 +783,17 @@ void initPath() {
     addTrackSwitch('F');
 
     //Big Connection West
+    //connectTracks("A4", "XX", 5); todo to bridge
     connectTracks("A6", "F6", 5);
     connectTracks("A7", "B8", 2);
-    connectTracks("B7", "E7", 4);
-    connectTracks("E8", "F7", 2);
+
+    //connectTracks("B5", "L4", 2); will be connected later
     connectTracks("B6", "C7", 2);
+    connectTracks("B7", "E7", 4);
+    //connectTracks("A7", "B8", 2); already connected
+
+    connectTracks("E8", "F7", 2);
+    
     connectTracks("C4", "D4", 3);
     connectTracks("D7", "E6", 2);
 
@@ -806,12 +809,37 @@ void initPath() {
     connectTracks("F4", "G4", 5);
     connectTracks("E5", "H5", 5);
     connectTracks("D6", "I6", 5);
+
+    addTrackSwitch('J');
+    //addTrackSwitch('K'); //cant switch since is for LSM-04
+    addTrackSwitch('L');
+
+    connectTracks("J4", "G6", 2);
+    connectTracks("J7", "L6", 20);
+    connectTracks("B5", "L4", 2);
 }
 
 int pathFound = -1;
+bool showedBootup = false;
+bool drawedBootup = false;
 
 void loop()
 {
+    if(!showedBootup)
+    {
+        if(!drawedBootup)
+        {
+            tft.fillScreen(TFT_WHITE);
+            tft.drawXBitmap(96, 50, icon_tardis, 128, 128, TFT_BLUE);
+            tft.setTextColor(TFT_BLUE, TFT_WHITE);
+            tft.drawString("Mikes Weichensteuerung v0.1", 40, 200);
+            drawedBootup = true;
+        }
+        if(millis() > 5000)
+            showedBootup = true;
+        return;
+    }
+
     switch (progState)
     {
         case ProgState::Init:

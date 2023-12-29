@@ -164,18 +164,23 @@ struct Track tracks[] = {
         .posX = 1,
         .posY = 0,
         .type = Type::Gerade90,
+        .track = "C6",
         .isUpdated = true
     },
     {
         .posX = 1,
         .posY = 1,
         .type = Type::Kurve90,
+        .track = "L6",
         .isUpdated = true
     },
     {
         .posX = 1,
         .posY = 2,
+        .i2c_addr = 0x31,
+        .nummer = 1,
         .type = Type::WeicheR,
+        .track = "LX",
         .isUpdated = true
     },
     {
@@ -236,18 +241,21 @@ struct Track tracks[] = {
         .posX = 2,
         .posY = 0,
         .type = Type::Gerade90,
+        .track = "C6",
         .isUpdated = true
     },
     {
         .posX = 2,
         .posY = 1,
         .type = Type::Gerade90,
+        .track = "L6",
         .isUpdated = true
     },
     {
         .posX = 2,
         .posY = 2,
         .type = Type::Gerade90,
+        .track = "L7",
         .isUpdated = true
     },
     {
